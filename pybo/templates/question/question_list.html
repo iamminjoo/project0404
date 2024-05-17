@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if question_list %}
+
+    <div class="container my-4">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+
+                {% for question in question_list %}
+            <tr>
+                <td>{{(question_list.page -1)*question_list.per_page + loop.index}}</td>
+                <td>
+                    <a href="{{url_for('question.detail',question_id=question.id)}}">
+                        {{question.subject}}
+                        {% if question.answer_set|length %}
+                        <span>[{{question.answer_set|length}}]</span>
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    {{question.user.username}}
+                </td>
+                <td>{{question.create_date|datetime}}</td>
+            </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        {% include "paging_part.html" %}
+
+        <a href="{{url_for('question.create')}}">질문등록</a>
+
+    </div>
+
+    {% else %}
+        <p>등록된 질문이 없습니다.</p>
+    {% endif %}
+
+    <select name="test" id="test">
+        <option value="hello1">hello1</option>
+        <option value="hello2">hello2</option>
+        <option value="hello3">hello3</option>
+    </select>
+
+    {% include "weather_part.html" %}
+
+    <input type="hidden" id="city" value="/서울 강동구 천호제1동">
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+$(document).ready(function(){
+    getWeather();
+});
+
+
+</script>
+
+{% endblock %}

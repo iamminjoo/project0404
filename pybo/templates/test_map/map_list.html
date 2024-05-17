@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for info in card %}
+
+        <div class="card" style="width: 20rem; display: inline-block; margin-right: 20px;">
+            <div class="card-body">
+            <h5 class="card-title">{{info.title}}</h5>
+            <img src="{{url_for('static', filename='/upload/'+info.img)}}" alt="첨부된 사진" class="card-img-top" style="width: 100%; height: 100%;">
+            <p class="card-text">{{info.text}}</p>
+            <a href="{{url_for('map.map_card', info_map = info.map)}}" class="card-link">지도 바로가기</a> <br>
+            <a href="{{info.url}}" class="card-link">홈페이지 바로가기</a>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

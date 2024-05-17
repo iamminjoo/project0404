@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<!-- file 업로드 시, form태그의 method는 post, enctype=multipart/form-data -->
+<form action="/test/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file">
+    <button>upload</button>
+</form>
+
+
+<hr>
+
+
+<form id="frm_ajax" action="/test/upload_ajax" method="post" enctype="multipart/form-data">
+    <input type="file" name="zzz"><br>
+    <input name="id"><br>
+
+    <button id="ajax_btn" type="button">ajax_upload</button>
+</form>
+
+<img id="upload_ajax_result_img" width="20%" height="20%">
+
+{%  endblock %}
+
+
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('#ajax_btn').click(function(){
+        //let form = document.getElementById("frm_ajax");
+        let form = $("#frm_ajax")[0     ]
+
+        let formData = new FormData(form);
+
+        $.ajax({
+            url: "/test/upload_ajax",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: formData,
+            dataType:"text",
+            success: function(result){
+                if (result != null && result != ""){
+                    $("#upload_ajax_result_img").attr("src", result);
+                }
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %}

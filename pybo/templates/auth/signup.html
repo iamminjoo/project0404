@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post">
+    {{form.csrf_token}}
+    <!--유효성검사 경과 : 에러와 관련된 코드를 html로 만들고 include를 이용해 넣음.-->
+
+    {% include "form_errors.html" %}
+
+    <div class="mb-3">
+      <label for="username" class="form-label">아이디</label>
+      <input class="form-control" id="username" name="username" value="{{form.username.data or ''}}">
+      <button id="checkusername" type="button">아이디 중복검사</button>
+      <p id="checkusernameresult"></p>
+    </div>
+
+    <div class="mb-3">
+      <label for="password1" class="form-label">비밀번호</label>
+      <input type="password" class="form-control" id="password1" name="password1">
+    </div>
+
+    <div class="mb-3">
+        <label for="password2" class="form-label">비밀번호확인</label>
+        <input type="password" class="form-control" id="password2" name="password2">
+      </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">이메일</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{form.email.data or ''}}">
+    </div>
+
+    <button type="submit" class="btn btn-primary">회원가입</button>
+  </form>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function(){
+      $("#checkusername").click(function(){
+          let username = $("#username").val();
+
+          if(username == ""){
+            $("#username").focus();
+          }
+          
+          $.ajax({
+              url: "/auth/checkusername/"+username,
+              type: "GET",
+              dataType: "text",
+              success: function(result){
+                if(result == 1){
+                  $("#checkusernameresult").text("사용가능");
+                }else if(result == -1){
+                  $("#checkusernameresult").text("사용불가");
+                  $("#username").focus();
+                }
+              }
+          });
+      });
+  });
+  </script>
+{% endblock %}    
